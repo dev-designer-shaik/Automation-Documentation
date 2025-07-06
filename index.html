@@ -2,305 +2,59 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>DSI Media Repository – Complete Implementation Guide</title>
+<title>Marayai × DS Studio – Unified Digital Ecosystem Guide</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>mermaid.initialize({startOnLoad:true});</script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary-color: #007acc;
-    --secondary-color: #28a745;
-    --accent-color: #ffc107;
-    --text-color: #333;
-    --bg-light: #fafafa;
-    --bg-medium: #f8f9fa;
-    --bg-dark: #1a1a1a;
-    --card-bg: #fff;
-    --border-color: #e9ecef;
-    --shadow-light: 0 2px 8px rgba(0,0,0,0.05);
-    --shadow-medium: 0 2px 10px rgba(0,0,0,0.1);
-  }
+  /* --- SAME DESIGN TOKEN SET AS ORIGINAL GUIDE --- */
+  :root{--primary-color:#007acc;--secondary-color:#28a745;--accent-color:#ffc107;--text-color:#333;
+        --bg-light:#fafafa;--bg-medium:#f8f9fa;--bg-dark:#1a1a1a;--card-bg:#fff;--border-color:#e9ecef;
+        --shadow-light:0 2px 8px rgba(0,0,0,0.05);--shadow-medium:0 2px 10px rgba(0,0,0,0.1);}
+  html,body{margin:0;font-family:'Poppins',sans-serif;background:var(--bg-light);color:var(--text-color);line-height:1.6;}
+  header{background:var(--bg-dark);color:#fff;padding:1.5rem 2rem;position:sticky;top:0;z-index:1000;
+         box-shadow:var(--shadow-medium);}
+  h1{margin:0;font-size:1.9rem;font-weight:700}
+  .subtitle{margin:0.5rem 0 0 0;font-size:0.95rem;opacity:0.9;}
+  main{padding:2rem;max-width:1200px;margin:auto}
+  section{margin-bottom:4rem;background:var(--card-bg);padding:2.3rem;border-radius:10px;
+          border-left:6px solid var(--primary-color);box-shadow:var(--shadow-light);}
+  h2{color:var(--primary-color);font-size:1.8rem;margin-bottom:1.3rem;border-bottom:3px solid var(--primary-color);
+      padding-bottom:0.7rem;font-weight:700}
+  h3{color:var(--text-color);font-size:1.4rem;margin-top:2.2rem;margin-bottom:1rem;font-weight:600}
+  h4{color:var(--text-color);font-size:1.2rem;margin-top:1.8rem;margin-bottom:1rem;font-weight:600;}
+  .toc{background:var(--bg-medium);padding:1.8rem;border-radius:10px;margin-bottom:3rem;
+       box-shadow:var(--shadow-light);border:1px solid var(--border-color);}
+  .toc h3{margin-top:0;color:var(--primary-color);border-bottom:1px solid var(--primary-color);
+          padding-bottom:0.7rem;margin-bottom:1.3rem}
+  .toc ul{list-style:none;padding-left:0}
+  .toc li{margin:0.55rem 0}
+  .toc a{color:var(--primary-color);text-decoration:none;font-weight:500}
+  .toc a:hover{text-decoration:underline;color:var(--secondary-color)}
+  pre{background:#2d2d2d;color:#f8f8f2;padding:1.3rem;border-radius:8px;overflow-x:auto;margin:1.5rem 0;box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+  code{font-family:'Fira Code', Monaco, Consolas, monospace;font-size:0.9rem;background:#eef;padding:0.2em 0.4em;border-radius:4px;color:#d63384;}
+  pre code{background:none;padding:0;color: inherit;font-size:0.95rem;}
+  .mermaid{background:var(--card-bg);border:1px solid var(--border-color);padding:1.3rem;border-radius:8px;
+           box-shadow:var(--shadow-light);margin:1.5rem 0; text-align: center;}
+  footer{background:var(--bg-dark);color:#fff;text-align:center;padding:2rem;margin-top:4rem;font-size:0.9rem}
+  footer p{margin:0.5rem 0;opacity:0.8;}
+  ul,ol{margin:1rem 0;padding-left:1.5rem;}
+  li{margin:0.75rem 0;}
+  table{border-collapse:collapse;width:100%;margin:1.5rem 0;box-shadow:var(--shadow-light);border-radius:8px;overflow:hidden;}
+  th,td{border:1px solid var(--border-color);padding:1rem;text-align:left;}
+  th{background:var(--primary-color);color:#fff;font-weight:600;text-transform: uppercase;font-size:0.9rem;}
+  tr:nth-child(even){background:var(--bg-medium);}
+  .note{background:#d1e7dd;padding:1.2rem;border-left:5px solid var(--secondary-color);margin:1.5rem 0;border-radius:6px;color:#0f5132;}
+  .highlight{background:#fff3cd;padding:1.2rem;border-left:5px solid var(--accent-color);margin:1.5rem 0;border-radius:6px;color:#664d03;}
 
-  html,body{
-    margin:0;
-    font-family: 'Poppins', sans-serif;
-    background:var(--bg-light);
-    color:var(--text-color);
-    line-height:1.6;
-  }
-  header{
-    background:var(--bg-dark);
-    color:#fff;
-    padding:1.5rem 2rem;
-    position:sticky;
-    top:0;
-    z-index:1000;
-    box-shadow:var(--shadow-medium);
-  }
-  h1{
-    margin:0;
-    font-size:1.8rem;
-    font-weight:700;
-  }
-  .subtitle{
-    margin:0.5rem 0 0 0;
-    font-size:0.95rem;
-    opacity:0.9;
-  }
-  nav{
-    margin-top:1.2rem;
-    display:flex;
-    flex-wrap:wrap;
-    gap:1rem;
-  }
-  nav a{
-    color:#fff;
-    text-decoration:none;
-    font-size:0.9rem;
-    padding:0.6rem 1.2rem;
-    border-radius:6px;
-    transition:background 0.2s ease, transform 0.2s ease;
-    border:1px solid rgba(255,255,255,0.2);
-  }
-  nav a:hover{
-    background:rgba(255,255,255,0.15);
-    transform: translateY(-2px);
-  }
-  main{
-    padding:2rem;
-    max-width:1200px;
-    margin:auto;
-  }
-  section{
-    margin-bottom:4rem;
-    background:var(--card-bg);
-    padding:2.5rem;
-    border-radius:10px;
-    box-shadow:var(--shadow-light);
-    border-left: 6px solid var(--primary-color);
-  }
-  h2{
-    color:var(--primary-color);
-    font-size:2rem;
-    margin-bottom:1.5rem;
-    border-bottom:3px solid var(--primary-color);
-    padding-bottom:0.75rem;
-    font-weight:700;
-  }
-  h3{
-    color:var(--text-color);
-    font-size:1.5rem;
-    margin-top:2.5rem;
-    margin-bottom:1.2rem;
-    font-weight:600;
-  }
-  h4{
-    color:var(--text-color);
-    font-size:1.2rem;
-    margin-top:1.8rem;
-    margin-bottom:1rem;
-    font-weight:600;
-  }
-  table{
-    border-collapse:collapse;
-    width:100%;
-    margin:1.5rem 0;
-    box-shadow:var(--shadow-light);
-    border-radius:8px;
-    overflow:hidden;
-  }
-  th,td{
-    border:1px solid var(--border-color);
-    padding:1rem;
-    text-align:left;
-  }
-  th{
-    background:var(--primary-color);
-    color:#fff;
-    font-weight:600;
-    text-transform: uppercase;
-    font-size:0.9rem;
-  }
-  tr:nth-child(even){
-    background:var(--bg-medium);
-  }
-  code{
-    font-family:'Fira Code', Monaco, Consolas, monospace;
-    font-size:0.9rem;
-    background:#eef;
-    padding:0.2em 0.4em;
-    border-radius:4px;
-    color:#d63384;
-  }
-  pre{
-    background: #2d2d2d; /* Dark background for code blocks */
-    color: #f8f8f2; /* Light text for readability */
-    padding:1.5rem;
-    overflow-x:auto;
-    border-radius:8px;
-    border-left:5px solid var(--primary-color);
-    margin:1.5rem 0;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-  }
-  pre code{
-    background:none;
-    padding:0;
-    color: inherit;
-    font-size:0.95rem;
-  }
-  .mermaid{
-    background:var(--card-bg);
-    border:1px solid var(--border-color);
-    padding:1.5rem;
-    margin:1.5rem 0;
-    border-radius:8px;
-    text-align:center;
-    box-shadow:var(--shadow-light);
-  }
-  ul,ol{
-    margin:1rem 0;
-    padding-left:1.5rem;
-  }
-  li{
-    margin:0.75rem 0;
-  }
-  .toc{
-    background:var(--bg-medium);
-    padding:1.8rem;
-    border-radius:10px;
-    margin-bottom:3rem;
-    box-shadow:var(--shadow-light);
-    border:1px solid var(--border-color);
-  }
-  .toc h3{
-    margin-top:0;
-    color:var(--primary-color);
-    border-bottom:1px solid var(--primary-color);
-    padding-bottom:0.8rem;
-    margin-bottom:1.5rem;
-  }
-  .toc ul{
-    list-style:none;
-    padding-left:0;
-  }
-  .toc li{
-    margin:0.5rem 0;
-  }
-  .toc a{
-    color:var(--primary-color);
-    text-decoration:none;
-    font-weight:500;
-    transition:color 0.2s ease;
-  }
-  .toc a:hover{
-    text-decoration:underline;
-    color:var(--secondary-color);
-  }
-  .highlight{
-    background:#fff3cd;
-    padding:1.2rem;
-    border-left:5px solid var(--accent-color);
-    margin:1.5rem 0;
-    border-radius:6px;
-    color:#664d03;
-  }
-  .note{
-    background:#d1e7dd;
-    padding:1.2rem;
-    border-left:5px solid var(--secondary-color);
-    margin:1.5rem 0;
-    border-radius:6px;
-    color:#0f5132;
-  }
-  .warning{
-    background:#f8d7da;
-    padding:1.2rem;
-    border-left:5px solid #dc3545;
-    margin:1.5rem 0;
-    border-radius:6px;
-    color:#842029;
-  }
-  .cost-comparison{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:1.5rem;
-    margin:2rem 0;
-  }
-  .cost-card{
-    background:var(--card-bg);
-    padding:1.8rem;
-    border-radius:10px;
-    border:2px solid var(--primary-color);
-    box-shadow:var(--shadow-light);
-    text-align:center;
-    transition:transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .cost-card:hover{
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  }
-  .cost-card h4{
-    margin-top:0;
-    color:var(--primary-color);
-    font-size:1.4rem;
-    margin-bottom:1rem;
-  }
-  .cost-price{
-    font-size:1.2rem;
-    font-weight:bold;
-    color:var(--secondary-color);
-    margin-bottom:1rem;
-  }
-  .cost-card ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 1rem;
-    text-align: left;
-  }
-  .cost-card ul li {
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: #555;
-  }
-  footer{
-    background:var(--bg-dark);
-    color:#fff;
-    text-align:center;
-    padding:2.5rem;
-    margin-top:3rem;
-    font-size:0.9rem;
-  }
-  footer p{
-    margin:0.5rem 0;
-    opacity:0.8;
-  }
-
-  /* Specific styles for Deployment Graphs */
-  .deployment-graph-container {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    margin-top: 2rem;
-  }
-  .deployment-graph-container h3 {
-    text-align: center;
-    color: var(--primary-color);
-    font-size: 1.6rem;
-    border-bottom: 2px dashed var(--border-color);
-    padding-bottom: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
-
-  @media (max-width:768px){
-    header{padding:1rem; text-align: center;}
-    nav{flex-direction:column;gap:0.5rem; align-items: center;}
+  @media(max-width:768px){
     main{padding:1rem}
     section{padding:1.5rem}
+    header{padding:1rem; text-align: center;}
     h1{font-size:1.5rem;}
     h2{font-size:1.6rem;}
     h3{font-size:1.3rem;}
-    .cost-comparison{grid-template-columns:1fr}
     table, th, td {
       display: block;
       width: 100%;
@@ -334,8 +88,8 @@
 </head>
 <body>
 <header>
-  <h1>DSI Media Repository</h1>
-  <p class="subtitle">Complete Implementation Guide – Development & Production</p>
+  <h1>Marayai × DS Studio – Unified Digital Ecosystem Guide</h1>
+  <p class="subtitle">DSI Media Repository Integration and Shared Drives Overview</p>
 </header>
 
 <main>
@@ -343,39 +97,229 @@
 <div class="toc">
   <h3>📋 Table of Contents</h3>
   <ul>
-    <li><a href="#executive-summary">1. Executive Summary</a></li>
-    <li><a href="#architecture">2. System Architecture Overview</a></li>
-    <li><a href="#repository-structure">3. Repository Structure</a></li>
-    <li><a href="#workflows">4. Automated Workflow Processes</a></li>
-    <li><a href="#implementation">5. Technical Implementation</a></li>
-    <li><a href="#database">6. Database Design</a></li>
-    <li><a href="#deployment">7. Deployment & Hosting Options</a></li>
-    <li><a href="#security">8. Security & Compliance</a></li>
-    <li><a href="#testing">9. Testing & Monitoring</a></li>
-    <li><a href="#best-practices">10. Best Practices & Optimization</a></li>
+    <li><a href="#purpose">1 Purpose & Scope</a></li>
+    <li><a href="#governance">2 Governance & IP Ownership</a></li>
+    <li><a href="#workspace">3 Google Workspace OU / Shared-Drive Architecture</a></li>
+    <li><a href="#repository">4 DSI Repository Structure</a></li>
+    <li><a href="#database">5 Database & Data-Lake Blueprint</a></li>
+    <li><a href="#automation">6 Automation & AI-Agent Matrix</a></li>
+    <li><a href="#media-guide">7 Media-Pipeline Implementation Guide</a></li>
+    <li><a href="#change">8 Change-Management & Review Cycle</a></li>
   </ul>
 </div>
 
-<section id="executive-summary">
-  <h2>🎯 Executive Summary</h2>
-  <p>The <strong>DSI Media Repository Integration Architecture</strong> is an end‑to‑end automated pipeline for the first phase of automation workflows concerned with ingesting, analyzing, optimizing and distributing product media. It unifies Google Drive uploads, AI metadata enrichment, vector search, and CDN optimization while giving full traceability back to the source asset.</p>
-  
-  <h3>Core Technologies:</h3>
-  <ul>
-    <li><strong>Automated Processing</strong> – Drive uploads trigger n8n workflows automatically</li>
-    <li><strong>AI‑Enhanced Metadata</strong> – OpenAI + Weaviate vectors, multilingual descriptions</li>
-    <li><strong>CDN Optimisation</strong> – Cloudinary auto‑formats images &amp; video for web delivery</li>
-    <li><strong>Scalable Architecture</strong> – From $12 VPS to enterprise AWS deployment</li>
-    <li><strong>Full Traceability</strong> – Change‑log &amp; audit trail from upload to distribution</li>
-  </ul>
+<section id="purpose">
+<h2>🎯 Purpose & Scope</h2>
+<p> combineddigital stack. It replaces piecemeal PDFs and chat notes with a single, searchable HTML reference. Content is sourced from the </p>
 
+
+<h3>Core Technologies Used</h3>
+<div class="mermaid">
+graph LR
+    subgraph "Data Sources & Storage"
+        GD[Google Drive<br/>Primary Source]
+        QNAP[QNAP NAS<br/>Local Backup]
+        S3[AWS S3/GCS<br/>Cold Storage]
+    end
+    
+    subgraph "Processing & AI"
+        N8N[n8n<br/>Workflow Engine]
+        OAI[OpenAI<br/>AI Analysis]
+        PS[Google Pub/Sub<br/>Event Transport]
+    end
+    
+    subgraph "Databases"
+        WV[Weaviate<br/>Vector Search]
+        PG[PostgreSQL<br/>Metadata & Logs]
+    end
+    
+    subgraph "Distribution & CDN"
+        CDN[Cloudinary<br/>Media Optimization]
+        GC[Google Chat<br/>Notifications]
+    end
+    
+    style GD fill:#4285f4,color:#fff
+    style N8N fill:#ea4560,color:#fff
+    style WV fill:#fa6423,color:#fff
+    style PG fill:#336791,color:#fff
+    style CDN fill:#3448c5,color:#fff
+    style QNAP fill:#00a8e6,color:#fff
+    style OAI fill:#00a67e,color:#fff
+    style PS fill:#4285f4,color:#fff
+    style S3 fill:#ff9900,color:#fff
+    style GC fill:#34a853,color:#fff
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Technology</th>
+      <th>Primary Function</th>
+      <th>Integration Points</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Source Control</td><td>Google Drive</td><td>Primary media repository</td><td>n8n triggers, AI processing</td></tr>
+    <tr><td>Orchestration</td><td>n8n</td><td>Workflow automation engine</td><td>All systems integration hub</td></tr>
+    <tr><td>Vector Database</td><td>Weaviate</td><td>AI-powered semantic search</td><td>OpenAI embeddings, metadata</td></tr>
+    <tr><td>Relational DB</td><td>PostgreSQL</td><td>Structured metadata storage</td><td>Audit logs, processing status</td></tr>
+    <tr><td>AI Processing</td><td>OpenAI</td><td>Content analysis & tagging</td><td>Weaviate vectors, metadata</td></tr>
+    <tr><td>CDN & Optimization</td><td>Cloudinary</td><td>Media transformation & delivery</td><td>URL generation, format optimization</td></tr>
+    <tr><td>Local Backup</td><td>QNAP NAS</td><td>On-premise redundancy</td><td>Real-time Drive sync</td></tr>
+    <tr><td>Event Messaging</td><td>Google Pub/Sub</td><td>Real-time event processing</td><td>File upload triggers</td></tr>
+    <tr><td>Notifications</td><td>Google Chat</td><td>Team communication</td><td>Workflow status updates</td></tr>
+    <tr><td>Cold Storage</td><td>AWS S3/Google Cloud Storage</td><td>Long-term archival</td><td>Data lake, compliance</td></tr>
+  </tbody>
+</table>
 </section>
 
-<section id="architecture">
-  <h2>🏗️ System Architecture Overview</h2>
+<section id="governance">
+<h2>🏛️ Governance & IP Ownership</h2>
+<h3>2.1 IP Hierarchy</h3>
+<div class="mermaid">
+graph LR
+MH[Marayai Holdings<br/>Parent Company] --> SF[Shaikdom Foundation<br/>Non‑Profit Arm]
+MH --> DSS[Designer Shaik Studio<br/>Creative Unit]
+DSS --> DSI[DSI Product Repository<br/>Content Hub]
+SF --> DSI
+</div>
+<h3>2.2 Digital Asset Ownership</h3>
+<p>All digital assets created or acquired by any entity within the Marayai ecosystem are ultimately owned by Marayai Holdings. Usage rights, licensing, and distribution are governed by specific protocols outlined in this guide.</p>
+<h3>2.3 Compliance & Legal</h3>
+<p>Adherence to regional data privacy laws (e.g., GDPR, ADGM) and international intellectual property regulations is mandatory. Regular audits are conducted to ensure compliance.</p>
+</section>
+
+<section id="workspace">
+<h2>🌐 Google Workspace OU / Shared-Drive Architecture</h2>
+<p>The Google Workspace environment is structured to reflect the organizational hierarchy and facilitate efficient collaboration and data management. Shared drives are used for centralized access and governance of key digital assets.</p>
+
+<h3>Current Workspace Shared Drives Directory</h3>
+<pre><code>
+
+[SANDBOX] DSI 00 - Archive
+[SANDBOX] DSI 01 - Technical-BIM & R&D
+[SANDBOX] DSI 02 - Finance & Legal
+[SANDBOX] DSI 03 - Marketing & Investor Relations
+[SANDBOX] DSI 04 - Project Marayai
+    Project‐Marayai
+    ├── Country_Nodes
+    ├── Desert_Voyager_Sculpture
+    ├── Master_Plans
+    └── Orb_Nexus_Bahrain
+        ├── CGI
+        ├── Drawings
+        └── Permits
+[SANDBOX] DSi 05 - Media Governance        
+    Governance & Protocols
+    ├── Change‐Log
+    ├── Domain & DNS Records
+    └── IP & Licences
+[SANDBOX] DSi 06 - Media Repository
+    DSI-Product-Repository
+    ├── DSI-Product-Repository
+    │   ├── Metadata
+    │   ├── Palace-of-Fragrances
+    │   ├── Palace-of-Precision
+    │   ├── Palace-of-Style
+    │   └── Processed-Media
+    │       ├── ERP-Integrated
+    │       ├── Social-Media-Posts
+    │       └── Web-Optimized
+    │           ├── Metadata
+    │           │   ├── AI-Generated-Tags
+    │           │   ├── Approval-Stages
+    │           │   ├── Media-Change-History
+    │           │   ├── Multilingual-Descriptions
+    │           │   └── Tagging-Data
+    │           │   └── Version-Control
+    │           ├── Palace-of-Fragrances
+    │           │   ├── Classic-Range
+    │           │   │   ├── Amber-Kroud
+    │           │   │   ├── Chic-Shaik-Emerald
+    │           │   │   ├── Opulent-Shaik-Amethyst
+    │           │   │   ├── Opulent-Shaik-Sapphire
+    │           │   │   └── Sochi-Onyx
+    │           │   └── Precious-Range
+    │           │       ├── Objet-d-Art-Luxury-Sterling-Silver
+    │           │       └── Objet-d-Art-Optimum-Precious-Gold
+    │           ├── Palace-of-Precision
+    │           └── Palace-of-Style
+</code></pre>
+
+<h3>3.1 Organizational Units (OUs)</h3>
+<p>OUs mirror the corporate structure, allowing for granular policy application and user management.</p>
+<pre><code>
+ Sandbox Test (Root OU  environment) [Acctual ROOT is designershaik.com]
+    ├── Group Central (Existing OU for Corporate Functions)
+    │   ├── Governance (For legal, compliance, HR, and IT oversight)
+    │   │   ├── Policies & Procedures
+    │   │   ├── Legal
+    │   │   ├── Compliance
+    │   │   └── IT Operations
+    │   ├── Finance
+    │   ├── Human Resources
+    │   └── Executive (For steering committee, board packs, KPI owners)
+    │       ├── Steering Committee
+    │       ├── Board
+    │       └── KPI Management
+    │
+    ├── DS_Studio (For design, production, and core media creation)
+    │   ├── Production (For active projects and raw creative assets)
+    │   │   ├── Video Production
+    │   │   ├── Photography
+    │   │   ├── Graphic Design
+    │   │   └── Audio Production
+    │   ├── Archives (Studio-specific, long-term raw asset storage)
+    │   ├── Processing & AI (For n8n, Weaviate, OpenAI integrations - primarily service accounts)
+    │   │   ├── Staging (Temporary storage during processing)
+    │   │   ├── AI-Processed (Output of AI tagging and metadata enrichment)
+    │   │   └── Metadata Logs (For PostgreSQL and audit trails)
+    │   ├── Processed Media (Categorized and optimized media for distribution)
+    │   │   ├── Web-Optimized (For Cloudinary distribution)
+    │   │   ├── Social-Media-Posts (Optimized for social channels)
+    │   │   ├── Ads-Promotions (Optimized for advertising campaigns)
+    │   │   └── Archived-Media (Long-term storage of final processed assets)
+    │   ├── Integration Accounts (For DSI Media Repository service accounts)
+    │   │   ├── n8n Service Account
+    │   │   ├── Weaviate Service Account
+    │   │   ├── Cloudinary Service Account
+    │   │   └── ERP Integration Account
+    │   └── Backup & Recovery (For QNAP NAS and disaster recovery plans for the repository)
+    │   └── Shared Resources (Studio-specific shared templates, guides)
+    │
+    ├── DS_Brand (For marketing, brand management, and external communications)
+    │   ├── Marketing Campaigns (For active campaign assets and planning)
+    │   │   ├── Product Launches
+    │   │   ├── Seasonal Promotions
+    │   │   └── Digital Advertising
+    │   ├── Brand Assets (Central repository for official logos, guidelines, approved media)
+    │   ├── Public Relations
+    │   ├── Social Media Management
+    │   └── Shared Resources (Brand-specific templates, communication guidelines)
+    │
+    │
+    └── MCV
+        ├── Engineering ( Engineering department)
+        ├── Manufacturing Admin ( Manufacturing Administration department)
+        ├── Production ( Production department)
+        └── Supply Chain Management ( Supply Chain Management department)
   
-  <h3>High‑Level Architecture</h3>
-  <div class="mermaid">
+</code></pre>
+<h3>3.2 Shared Drive Naming Convention</h3>
+<p><code>[Prefix]_[Department/Project]_[Purpose]</code><br>e.g., <code>00_Governance_Protocols</code>, <code>10_Marayai_MasterPlans</code></p>
+<h3>3.3 Access & Permissions</h3>
+<p>Permissions are strictly managed at the OU and shared drive level, adhering to the principle of least privilege.</p>
+<h3>3.4 Integration with DSi Repository</h3>
+<p>Shared Drives serve as the primary source for media ingestion into the DSi Product Repository, ensuring a single source of truth.</p>
+</section>
+
+<section id="repository">
+<h2>📁 DSI Repository Structure</h2>
+<p>The DSI Media Repository Integration Architecture is an end-to-end automated media processing pipeline that streamlines the management of digital assets for DSI's luxury product lines. The system automatically ingests media files from Google Drive, processes them through AI services, stores semantic vectors in Weaviate, logs metadata in PostgreSQL, and optimizes media for CDN distribution.</p>
+
+<h3>High-Level Architecture</h3>
+<div class="mermaid">
 graph TB
     subgraph "Data Sources"
         GD[Google Drive<br/>DSI Product Repository]
@@ -403,7 +347,7 @@ graph TB
     N8N -->|Backup| QNAP
     N8N -->|Notify Team| GC
     N8N -->|Update Metadata| GD
-    
+
     style GD fill:#e1f5fe
     style N8N fill:#f3e5f5
     style WV fill:#e8f5e8
@@ -413,37 +357,23 @@ graph TB
     style OAI fill:#ffebcc
     style QNAP fill:#e6e6e6
     style GC fill:#d3f5e9
-  </div>
-
-  <h3>High-Level Data Flow</h3>
-  <ol>
-    <li>Drive Upload</li>
-    <li>Pub/Sub Trigger</li>
-    <li>n8n Processing</li>
-    <li>Vector Storage</li>
-    <li>Metadata DB</li>
-    <li>Drive Feedback</li>
-  </ol>
-</section>
-
-<section id="repository-structure">
-  <h2>📁 Repository Structure</h2>
-  
-  <div class="mermaid">
+</div>
+<h3>Repository Folder Structure</h3>
+<div class="mermaid">
 graph TD
     Root[DSI-Product-Repository]
-    
+
     subgraph "System Folders"
         Meta[Metadata/]
         Proc[Processed-Media/]
     end
-    
+
     subgraph "Product Palaces"
         PF[Palace-of-Fragrances/]
         PP[Palace-of-Precision/]
         PS[Palace-of-Style/]
     end
-    
+
     subgraph "Metadata Structure"
         Meta --> Tag[Tagging-Data/]
         Meta --> AI[AI-Generated-Tags/]
@@ -452,163 +382,568 @@ graph TD
         Meta --> Change[Media-Change-History/]
         Meta --> Approval[Approval-Stages/]
     end
-    
+
     subgraph "Processed Media"
         Proc --> Web[Web-Optimized/]
         Proc --> ERP[ERP-Integrated/]
         Proc --> Social[Social-Media-Posts/]
     end
-    
+
     subgraph "Palace of Fragrances"
         PF --> Precious[Precious-Range/]
         PF --> Classic[Classic-Range/]
-        
+
         Precious --> OptimumGold[Objet-d-Art-Optimum-Precious-Gold/]
         Precious --> SterlinSilver[Objet-d-Art-Luxury-Sterling-Silver/]
-        
+
         Classic --> Amethyst[Opulent-Shaik-Amethyst/]
         Classic --> Sapphire[Opulent-Shaik-Sapphire/]
         Classic --> Emerald[Chic-Shaik-Emerald/]
         Classic --> Onyx[Sochi-Onyx/]
         Classic --> Amber[Amber-Kroud/]
     end
-    
+
     Root --> Meta
     Root --> Proc
     Root --> PF
     Root --> PP
     Root --> PS
-    
+
     style Root fill:#f9f9f9
     style Meta fill:#e3f2fd
     style Proc fill:#e8f5e8
     style PF fill:#fce4ec
     style PP fill:#fff3e0
     style PS fill:#f3e5f5
-  </div>
-
-  <h3>File Naming Convention</h3>
-  <div class="highlight">
-    <strong>Pattern:</strong> <code>{ProductName}_{SKU}_{descriptor}_{timestamp}.{extension}</code>
-    <br><br>
-    <strong>Examples:</strong>
-    <ul>
-      <li><code>Opulent-Shaik-Amethyst_OSA-GE-100_original_20250703.jpg</code></li>
-      <li><code>Objet-d-Art-Optimum_OAO-FL-50_web_optimized.webp</code></li>
-      <li><code>AstroTime-MK1_ATM-IG-001_ai_metadata.json</code></li>
-    </ul>
-  </div>
-
-  <h3>Folder Hierarchy Example</h3>
-  <pre><code>DSI-Product-Repository/
-├── Metadata/
-│   ├── Tagging-Data/
-│   ├── AI-Generated-Tags/
-│   ├── Multilingual-Descriptions/
-│   ├── Version-Control/
-│   ├── Media-Change-History/
-│   └── Approval-Stages/
-├── Processed-Media/
-│   ├── Web-Optimized/
-│   ├── ERP-Integrated/
-│   └── Social-Media-Posts/
-├── Palace-of-Fragrances/
-│   ├── Precious-Range/
-│   │   ├── Objet-d-Art-Optimum-Precious-Gold/
-│   │   └── Objet-d-Art-Luxury-Sterling-Silver/
-│   └── Classic-Range/
-│       ├── Opulent-Shaik-Amethyst/
-│       ├── Opulent-Shaik-Sapphire/
-│       ├── Chic-Shaik-Emerald/
-│       ├── Sochi-Onyx/
-│       └── Amber-Kroud/
-├── Palace-of-Precision/
-└── Palace-of-Style/</code></pre>
+</div>
+<h3>File Naming Convention</h3>
+<div class="highlight">
+<strong>Pattern:</strong> <code>{ProductName}_{SKU}_{descriptor}_{timestamp}.{extension}</code> <br><br>
+<strong>Examples:</strong>
+<ul>
+  <li><code>Opulent-Shaik-Amethyst_OSA-GE-100_original_20250703.jpg</code></li>
+  <li><code>Objet-d-Art-Optimum_OAO-FL-50_web_optimized.webp</code></li>
+  <li><code>AstroTime-MK1_ATM-IG-001_ai_metadata.json</code></li>
+</ul>
+</div>
 </section>
 
-<section id="workflows">
-  <h2>⚙️ Automated Workflow Processes</h2>
+<section id="database">
+<h2>🗄️ Database & Data-Lake Blueprint</h2>
+<h3>5.1 PostgreSQL (Metadata & Logs)</h3>
+<p>Primary database for structured metadata, audit trails, and workflow logs.</p>
+  <pre><code>-- Media Assets Table
+CREATE TABLE media_assets (
+    id SERIAL PRIMARY KEY,
+    drive_file_id VARCHAR(255) UNIQUE,
+    weaviate_object_id UUID,
+    product_name VARCHAR(255),
+    sku VARCHAR(100),
+    file_url TEXT,
+    processing_status VARCHAR(50),
+    ai_description TEXT,
+    ai_tags TEXT[],
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Processing Logs Table
+CREATE TABLE processing_logs (
+    id SERIAL PRIMARY KEY,
+    media_asset_id INTEGER REFERENCES media_assets(id),
+    workflow_execution_id VARCHAR(255),
+    step_name VARCHAR(100),
+    status VARCHAR(50),
+    error_message TEXT,
+    processing_time INTERVAL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Indexes for Performance
+CREATE INDEX idx_media_assets_sku ON media_assets(sku);
+CREATE INDEX idx_media_assets_status ON media_assets(processing_status);
+CREATE INDEX idx_processing_logs_asset_id ON processing_logs(media_asset_id);
+CREATE INDEX idx_processing_logs_status ON processing_logs(status);</code></pre>
+<h3>5.2 Weaviate (Vector Database)</h3>
+<p>Used for storing semantic vectors generated from media content, enabling advanced AI-driven search and recommendations.</p>
+  <pre><code>{
+  "classes": [{
+    "class": "MediaAsset",
+    "vectorizer": "text2vec-openai",
+    "properties": [
+      {"name": "productName", "dataType": ["string"]},
+      {"name": "sku", "dataType": ["string"]},
+      {"name": "description", "dataType": ["text"]},
+      {"name": "tags", "dataType": ["string[]"]},
+      {"name": "fileUrl", "dataType": ["string"]},
+      {"name": "processingStatus", "dataType": ["string"]},
+      {"name": "driveFileId", "dataType": ["string"]},
+      {"name": "timestamp", "dataType": ["date"]}
+    ]
+  }]
+}</code></pre>
+<h3>5.3 Data Lake Strategy</h3>
+<p>The DSI Data Lake leverages AWS S3 as the primary storage backbone, integrating with Google Workspace Drive as the source repository. The architecture focuses on workflow-driven data movement where n8n processes append metadata and processed media back to Google Drive while maintaining long-term archives in AWS S3 with intelligent lifecycle management.</p>
+
+<h4>AWS-Centric Data Lake Architecture</h4>
+<div class="mermaid">
+graph TB
+    subgraph "Google Workspace (Source)"
+        GWS[Google Workspace Drive<br/>DSI Repository]
+        GWSMETA[Drive: /Metadata/<br/>AI Tags & Change History]
+        GWSPROC[Drive: /Processed-Media/<br/>CDN URLs & Optimized]
+    end
+    
+    subgraph "Processing Infrastructure"
+        N8N[n8n Container<br/>Workflow Orchestration]
+        WV[Weaviate Database<br/>Vector Storage]
+        RDS[AWS RDS PostgreSQL<br/>Metadata & Logs]
+    end
+    
+    subgraph "AWS Data Lake Tiers"
+        subgraph "Hot Storage (0-30 days)"
+            S3_STD[AWS S3 Standard<br/>Active Processing]
+            CDN[Cloudinary CDN<br/>Distribution Cache]
+        end
+        
+        subgraph "Warm Storage (30-365 days)"
+            S3_IA[AWS S3 Infrequent Access<br/>Recent Archives]
+        end
+        
+        subgraph "Cold Storage (1-7 years)"
+            S3_GLACIER[AWS S3 Glacier<br/>Long-term Archives]
+        end
+        
+        subgraph "Deep Archive (7+ years)"
+            S3_DEEP[AWS S3 Deep Archive<br/>Compliance Storage]
+        end
+    end
+    
+    subgraph "Monitoring & Analytics"
+        CW[CloudWatch<br/>Metrics & Logs]
+        ATHENA[AWS Athena<br/>SQL Analytics]
+        QSIGHT[QuickSight<br/>Business Intelligence]
+    end
+    
+    subgraph "Local Infrastructure"
+        QNAP[QNAP NAS<br/>Local Backup]
+    end
+    
+    %% Workflow Data Flows
+    GWS -->|File Upload Trigger| N8N
+    N8N -->|AI Processing| WV
+    N8N -->|Metadata Logging| RDS
+    N8N -->|CDN Upload| CDN
+    N8N -->|Archive Copy| S3_STD
+    N8N -->|Backup Sync| QNAP
+    
+    %% Workflow Append Operations
+    N8N -->|Append AI Metadata| GWSMETA
+    N8N -->|Append CDN URLs| GWSPROC
+    
+    %% AWS Lifecycle Management
+    S3_STD -->|30 days| S3_IA
+    S3_IA -->|365 days| S3_GLACIER
+    S3_GLACIER -->|7 years| S3_DEEP
+    
+    %% Monitoring Integration
+    N8N -->|Workflow Logs| CW
+    RDS -->|Query Logs| CW
+    WV -->|Performance Metrics| CW
+    S3_STD -->|Access Patterns| CW
+    
+    %% Analytics Pipeline
+    RDS -->|ETL Queries| ATHENA
+    S3_STD -->|Data Lake Queries| ATHENA
+    ATHENA -->|Business Reports| QSIGHT
+    
+    style GWS fill:#4285f4,color:#fff
+    style N8N fill:#f3e5f5,color:#000
+    style WV fill:#fa6423,color:#fff
+    style RDS fill:#ff9900,color:#fff
+    style S3_STD fill:#ff9900,color:#fff
+    style S3_IA fill:#ffb84d,color:#000
+    style S3_GLACIER fill:#cc7a00,color:#fff
+    style S3_DEEP fill:#806600,color:#fff
+    style CW fill:#ff4b4b,color:#fff
+    style CDN fill:#3448c5,color:#fff
+</div>
+
+<h4>Workflow-Driven Data Lifecycle</h4>
+<p>Based on the three core workflows, data moves through the system as follows:</p>
+
+<ol>
+  <li><strong>Workflow 1 - Ingestion & Backup:</strong>
+    <ul>
+      <li>File uploaded to Google Drive triggers n8n workflow</li>
+      <li>n8n creates change log in <code>/Metadata/Media-Change-History/</code></li>
+      <li>File copied to AWS S3 Standard for processing</li>
+      <li>Metadata logged to AWS RDS PostgreSQL</li>
+      <li>QNAP NAS backup triggered</li>
+    </ul>
+  </li>
   
-  <h3>Complete End-to-End Process Flow</h3>
-  <div class="mermaid">
+  <li><strong>Workflow 2 - AI Processing & Metadata Enrichment:</strong>
+    <ul>
+      <li>n8n sends file to Weaviate for vector analysis</li>
+      <li>AI metadata generated and stored in Weaviate</li>
+      <li>n8n appends AI tags to <code>/Metadata/AI-Generated-Tags/</code></li>
+      <li>n8n appends tagging data to <code>/Metadata/Tagging-Data/</code></li>
+      <li>Processing logs stored in RDS PostgreSQL</li>
+    </ul>
+  </li>
+  
+  <li><strong>Workflow 3 - CDN Upload & Distribution:</strong>
+    <ul>
+      <li>Optimized files uploaded to Cloudinary CDN</li>
+      <li>n8n appends CDN URLs to <code>/Processed-Media/Web-Optimized/</code></li>
+      <li>Original files moved to appropriate S3 storage tier</li>
+      <li>Access patterns logged to CloudWatch</li>
+    </ul>
+  </li>
+</ol>
+
+<h4>AWS RDS PostgreSQL Integration</h4>
+<pre><code>-- Enhanced schema for data lake integration
+CREATE TABLE dsi_media_lake (
+    id SERIAL PRIMARY KEY,
+    drive_file_id VARCHAR(255) UNIQUE,
+    weaviate_object_id UUID,
+    s3_bucket VARCHAR(100),
+    s3_key VARCHAR(500),
+    current_storage_class VARCHAR(50),
+    product_name VARCHAR(255),
+    sku VARCHAR(100),
+    file_size_bytes BIGINT,
+    cloudinary_url TEXT,
+    processing_status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT NOW(),
+    last_accessed TIMESTAMP,
+    storage_tier_updated TIMESTAMP,
+    lifecycle_stage VARCHAR(20) DEFAULT 'hot'
+);
+
+-- CloudWatch metrics table
+CREATE TABLE cloudwatch_metrics (
+    metric_id SERIAL PRIMARY KEY,
+    namespace VARCHAR(100),
+    metric_name VARCHAR(100),
+    value DECIMAL(10,2),
+    unit VARCHAR(20),
+    timestamp TIMESTAMP DEFAULT NOW(),
+    dimensions JSONB
+);
+
+-- Storage cost tracking
+CREATE TABLE storage_costs (
+    cost_id SERIAL PRIMARY KEY,
+    month_year VARCHAR(7),
+    storage_tier VARCHAR(20),
+    total_gb DECIMAL(10,3),
+    cost_usd DECIMAL(8,2),
+    file_count INTEGER,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+</code></pre>
+
+<h4>AWS S3 Lifecycle Configuration</h4>
+<pre><code>{
+  "Rules": [
+    {
+      "ID": "DSI-MediaLifecycle",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "dsi-media/"
+      },
+      "Transitions": [
+        {
+          "Days": 30,
+          "StorageClass": "STANDARD_IA"
+        },
+        {
+          "Days": 365,
+          "StorageClass": "GLACIER"
+        },
+        {
+          "Days": 2555,
+          "StorageClass": "DEEP_ARCHIVE"
+        }
+      ]
+    },
+    {
+      "ID": "DSI-ProcessedMedia",
+      "Status": "Enabled",
+      "Filter": {
+        "Prefix": "processed/"
+      },
+      "Transitions": [
+        {
+          "Days": 90,
+          "StorageClass": "STANDARD_IA"
+        },
+        {
+          "Days": 730,
+          "StorageClass": "GLACIER"
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+
+<h4>CloudWatch Monitoring & Alerting</h4>
+<pre><code># CloudWatch Custom Metrics from n8n workflows
+{
+  "namespace": "DSI/MediaRepository",
+  "metrics": [
+    {
+      "name": "WorkflowExecutions",
+      "unit": "Count",
+      "dimensions": {"WorkflowType": "MediaIngestion"}
+    },
+    {
+      "name": "StorageCostOptimization", 
+      "unit": "Percent",
+      "dimensions": {"Tier": "Hot|Warm|Cold|Archive"}
+    },
+    {
+      "name": "WeaviateQueryLatency",
+      "unit": "Milliseconds",
+      "dimensions": {"QueryType": "VectorSearch"}
+    },
+    {
+      "name": "DriveAppendOperations",
+      "unit": "Count", 
+      "dimensions": {"FolderType": "Metadata|ProcessedMedia"}
+    }
+  ]
+}
+
+# CloudWatch Alarms Configuration
+{
+  "alarms": [
+    {
+      "name": "DSI-HighStorageCosts",
+      "metric": "AWS/S3/BucketBytesStored",
+      "threshold": 1000000000000,
+      "comparison": "GreaterThanThreshold"
+    },
+    {
+      "name": "DSI-WorkflowFailures", 
+      "metric": "DSI/MediaRepository/WorkflowExecutions",
+      "threshold": 3,
+      "comparison": "LessThanThreshold",
+      "period": 300
+    }
+  ]
+}
+</code></pre>
+
+<h4>Cost Optimization for AWS-Only Architecture</h4>
+<div class="highlight">
+<strong>Monthly Cost Breakdown (1TB Dataset):</strong>
+<ul>
+  <li><strong>S3 Standard (100GB):</strong> $2.30/month - Active processing files</li>
+  <li><strong>S3 IA (300GB):</strong> $3.75/month - Recent archives</li>
+  <li><strong>S3 Glacier (500GB):</strong> $2.00/month - Long-term storage</li>
+  <li><strong>S3 Deep Archive (100GB):</strong> $0.10/month - Compliance archives</li>
+  <li><strong>RDS PostgreSQL (db.t3.micro):</strong> $15/month - Metadata database</li>
+  <li><strong>CloudWatch Logs & Metrics:</strong> $3-5/month - Monitoring</li>
+  <li><strong>Data Transfer:</strong> $2-4/month - API calls and transfers</li>
+  <li><strong>Total Monthly Cost:</strong> $28-32/month for 1TB with enterprise monitoring</li>
+</ul>
+</div>
+
+<h4>AWS Athena Analytics Queries</h4>
+<pre><code>-- Query for storage optimization recommendations
+SELECT 
+    product_name,
+    sku,
+    current_storage_class,
+    COUNT(*) as file_count,
+    SUM(file_size_bytes) / 1024 / 1024 / 1024 as total_gb,
+    CASE 
+        WHEN MAX(last_accessed) < CURRENT_DATE - INTERVAL '30' DAY 
+             AND current_storage_class = 'STANDARD' 
+        THEN 'Move to IA'
+        WHEN MAX(last_accessed) < CURRENT_DATE - INTERVAL '365' DAY 
+             AND current_storage_class = 'STANDARD_IA'
+        THEN 'Move to Glacier'
+        ELSE 'Current tier optimal'
+    END as recommendation
+FROM dsi_media_lake 
+GROUP BY product_name, sku, current_storage_class
+ORDER BY total_gb DESC;
+
+-- CloudWatch metrics analysis
+SELECT 
+    DATE_TRUNC('day', timestamp) as date,
+    AVG(value) as avg_workflow_time,
+    COUNT(*) as total_executions,
+    SUM(CASE WHEN value > 300 THEN 1 ELSE 0 END) as slow_executions
+FROM cloudwatch_metrics 
+WHERE metric_name = 'WorkflowExecutionTime'
+AND timestamp > CURRENT_DATE - INTERVAL '30' DAY
+GROUP BY DATE_TRUNC('day', timestamp)
+ORDER BY date DESC;
+</code></pre>
+</section>
+<section id="automation">
+<h2>🤖 Automation & AI-Agent Matrix</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Function Area</th>
+      <th>Tool / Agent</th>
+      <th>Relevant Sections</th>
+      <th>Key Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Media Ingestion</td><td>n8n</td><td>4.1</td><td>Google Drive ↔ Cloudinary sync</td></tr>
+    <tr><td>AI Tagging</td><td>OpenAI + Weaviate</td><td>4.2</td><td>Automatic metadata generation</td></tr>
+    <tr><td>CDN Optimisation</td><td>Cloudinary</td><td>4.3</td><td>Image / video format conversion</td></tr>
+    <tr><td>ERP Integration</td><td>n8n</td><td>6.2, 6.3</td><td>Product data sync</td></tr>
+    <tr><td>Legal</td><td>5.1</td><td>Compliance tracking</td></tr>
+    <tr><td>Investor Relations</td><td>20_Marketing</td><td>3.3, 3.4</td><td>Data-room generation</td></tr>
+    <tr><td>Operational Efficiency</td><td>40_Technical & APIs</td><td>6.2, 6.3, 6.4</td><td>ERP ↔ Weaviate sync; n8n orchestrator</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="media-guide">
+<h2>🎞️ Media-Pipeline Implementation Guide</h2>
+<p>This section details the complete technical specification for deploying the DSI Media Repository Integration Architecture with automated workflows from upload to CDN distribution.</p>
+
+<h3>Automated Workflow Processes</h3>
+<h4>Complete End-to-End Process Flow</h4>
+<div class="mermaid">
 flowchart TB
     subgraph "Phase 1: Ingestion"
         Upload[File Upload] --> Detection[Auto-Detection]
         Detection --> Backup[QNAP Backup]
         Backup --> Log[Change Log]
     end
-    
-    subgraph "Phase 2: AI Processing" 
+
+    subgraph "Phase 2: AI Processing"
         Log --> AI[Weaviate Analysis]
         AI --> Tags[Generate Tags]
         Tags --> Meta[Create Metadata]
     end
-    
+
     subgraph "Phase 3: CDN Distribution"
         Meta --> CDN[Cloudinary Upload]
         CDN --> Optimize[Auto-Optimization]
         Optimize --> URLs[Generate URLs]
     end
-    
+
     subgraph "Phase 4: Integration"
         URLs --> ERP[ERP Integration]
         URLs --> Social[Social Media Variants]
         URLs --> Web[Web Distribution]
     end
-    
+
     Web --> Final[Media Ready for Distribution]
-    
+
     style Upload fill:#e1f5fe
     style AI fill:#f3e5f5
     style CDN fill:#fce4ec
     style Final fill:#e8f5e8
-  </div>
+</div>
 
-  <h3>Workflow 1: Media Ingestion & Backup</h3>
-  <ol>
-    <li><strong>File Upload to Product Folder</strong> → Detect File via Google Drive API</li>
-    <li><strong>Extract Product Name & SKU</strong> from Folder Path</li>
-    <li><strong>Log File Information</strong> in Tracking System</li>
-    <li><strong>Trigger QNAP NAS Backup Sync</strong></li>
-    <li><strong>Create Initial Metadata Record</strong></li>
-    <li><strong>Send Google Chat Notification</strong></li>
-    <li><strong>Complete:</strong> Update <code>/Metadata/Media-Change-History/{ProductName}_{SKU}_change_log.json</code></li>
-    <li><strong>File Ready for AI Processing</strong></li>
-  </ol>
-  
-  <div class="note">
-    <strong>Output Location:</strong><br>
-    <code>/Metadata/Media-Change-History/{ProductName}_{SKU}_change_log.json</code>
-  </div>
+<h4>Workflow 1: Media Ingestion & Backup</h4>
+<ol>
+  <li><strong>File Upload to Product Folder</strong> → Detect File via Google Drive API</li>
+  <li><strong>Extract Product Name & SKU</strong> from Folder Path</li>
+  <li><strong>Log File Information</strong> in Tracking System</li>
+  <li><strong>Trigger QNAP NAS Backup Sync</strong></li>
+  <li><strong>Create Initial Metadata Record</strong></li>
+  <li><strong>Send Google Chat Notification</strong></li>
+  <li><strong>Complete:</strong> Update <code>/Metadata/Media-Change-History/{ProductName}_{SKU}_change_log.json</code></li>
+  <li><strong>File Ready for AI Processing</strong></li>
+</ol>
+<div class="note">
+<strong>Output Location:</strong><br>
+<code>/Metadata/Media-Change-History/{ProductName}_{SKU}_change_log.json</code>
+</div>
 
-  <h3>Workflow 2: AI Tagging & Metadata Enrichment</h3>
-  <ol>
-    <li><strong>Trigger: Media Ingestion Complete</strong> → Send File to Weaviate for AI Analysis</li>
-    <li><strong>Generate Vector Embeddings</strong></li>
-    <li><strong>Extract Metadata</strong> - Objects, Colors, Themes</li>
-    <li><strong>Apply Product Context</strong> from Folder Structure</li>
-    <li><strong>Generate Multilingual Descriptions</strong></li>
-    <li><strong>Store Enriched Metadata</strong> in Weaviate</li>
-    <li><strong>Create Metadata Files:</strong>
-      <ul>
-        <li><code>/Metadata/AI-Generated-Tags/{ProductName}_{SKU}_ai_metadata.json</code></li>
-        <li><code>/Metadata/Tagging-Data/{ProductName}_{SKU}_tags.json</code></li>
-      </ul>
-    </li>
-    <li><strong>Trigger CDN Upload Workflow</strong></li>
-  </ol>
+<h4>Workflow 2: AI Tagging & Metadata Enrichment</h4>
+<div class="mermaid">
+flowchart TD
+    Trigger[Media Ingestion Complete] --> Send[Send File to Weaviate for AI Analysis]
+    Send --> Generate[Generate Vector Embeddings]
+    Generate --> Extract[Extract Metadata<br/>- Objects<br/>- Colors<br/>- Themes]
+    Extract --> Context[Apply Product Context from Folder Structure]
+    Context --> Multilingual[Generate Multilingual Descriptions]
+    Multilingual --> Store[Store Enriched Metadata in Weaviate]
+    Store --> CreateFiles[Create Metadata Files]
 
-  <h3>Workflow 3: CDN Upload & Optimization</h3>
-  <ol>
-    <li><strong>Start: AI Tagging Complete</strong> → Upload Images to Cloudinary with Auto-optimization</li>
-    <li><strong>Upload Videos</strong> to Vidjet Platform</li>
-    <li><strong>Generate Multiple Format Variants</strong> - WebP, Different Resolutions</li>
-    <li><strong>Create CDN URLs</strong> with Product Name Reference</li>
-    <li><strong>Store CDN Links</strong> with Original File Path Mapping</li>
-    <li><strong>Update Processed Media Folder</strong></li>
-    <li><strong>Complete:</strong> Update <code>/Processed-Media/Web-Optimized/{ProductName}_{SKU}_cloudinary_urls.json</code></li>
-    <li><strong>Send Completion Notification</strong></li>
-  </ol>
+    CreateFiles --> AITags[/Metadata/AI-Generated-Tags/<br/>ProductName_SKU_ai_metadata.json/]
+    CreateFiles --> TagData[/Metadata/Tagging-Data/<br/>ProductName_SKU_tags.json/]
+
+    AITags --> NextWorkflow[Trigger CDN Upload Workflow]
+    TagData --> NextWorkflow
+
+    style Trigger fill:#e1f5fe
+    style AITags fill:#e8f5e8
+    style TagData fill:#e8f5e8
+    style NextWorkflow fill:#fff3e0
+</div>
+<ol>
+  <li><strong>Trigger: Media Ingestion Complete</strong></li>
+  <li><strong>Send File to Weaviate</strong> for AI Analysis</li>
+  <li><strong>Generate Vector Embeddings</strong></li>
+  <li><strong>Extract Metadata</strong> (Objects, Colors, Themes)</li>
+  <li><strong>Apply Product Context</strong> from Folder Structure</li>
+  <li><strong>Generate Multilingual Descriptions</strong></li>
+  <li><strong>Store Enriched Metadata</strong> in Weaviate</li>
+  <li><strong>Create Metadata Files:</strong>
+    <ul>
+      <li><code>/Metadata/AI-Generated-Tags/{ProductName}_{SKU}_ai_metadata.json</code></li>
+      <li><code>/Metadata/Tagging-Data/{ProductName}_{SKU}_tags.json</code></li>
+    </ul>
+  </li>
+  <li><strong>Trigger CDN Upload Workflow</strong></li>
+</ol>
+
+<h4>Workflow 3: CDN Upload & Optimization</h4>
+<div class="mermaid">
+flowchart TD
+    Start[AI Tagging Complete] --> Upload[Upload Images to Cloudinary with Auto-optimization]
+    Upload --> Video[Upload Videos to Vidjet Platform]
+    Video --> Formats[Generate Multiple Format Variants<br/>- WebP<br/>- Different Resolutions]
+    Formats --> CDNUrls[Create CDN URLs with Product Name Reference]
+    CDNUrls --> Store[Store CDN Links with Original File Path Mapping]
+    Store --> Update[Update Processed Media Folder]
+    Update --> Complete["/Processed-Media/Web-Optimized/<br/>[ProductName]_[SKU]_cloudinary_urls.json/"]
+    Complete --> Notification[Send Completion Notification]
+
+    style Start fill:#e1f5fe
+    style Complete fill:#e8f5e8
+    style Notification fill:#fff3e0
+</div>
+<ol>
+  <li><strong>Trigger: AI Tagging Complete</strong></li>
+  <li><strong>Upload Images to Cloudinary</strong> with Auto-optimization</li>
+  <li><strong>Upload Videos to Vidjet Platform</strong></li>
+  <li><strong>Generate Multiple Format Variants</strong> (WebP, different resolutions)</li>
+  <li><strong>Create CDN URLs</strong> with Product Name Reference</li>
+  <li><strong>Store CDN Links</strong> with Original File Path Mapping</li>
+  <li><strong>Update Processed Media Folder</strong></li>
+  <li><strong>Completion:</strong> Update <code>/Processed-Media/Web-Optimized/{ProductName}_{SKU}_cloudinary_urls.json</code></li>
+  <li><strong>Send Completion Notification</strong></li>
+</ol>
+
+</section>
+
+<section id="change">
+<h2>🔄 Change-Management & Review Cycle</h2>
+<ul>
+  <li><strong>Weekly “Friday Pulse”</strong> call logs headline updates → pushed to <code>03_Change‑Log/</code></li>
+  <li><strong>CR‑### form</strong> required for any schema or permission alteration (owner: Data Steward)</li>
+  <li>Superseded versions archived to <code>99_Archive/Governance</code></li>
+  <li>Next scheduled full review: <strong>01 Oct 2025</strong></li>
+</ul>
 </section>
 
 <section id="implementation">
@@ -692,61 +1027,6 @@ GOOGLE_CHAT_WEBHOOK=your_chat_webhook_url</code></pre>
 }</code></pre>
 </section>
 
-<section id="database">
-  <h2>🗄️ Database Design</h2>
-
-  <h3>Weaviate Schema Configuration</h3>
-  <pre><code>{
-  "classes": [{
-    "class": "MediaAsset",
-    "vectorizer": "text2vec-openai",
-    "properties": [
-      {"name": "productName", "dataType": ["string"]},
-      {"name": "sku", "dataType": ["string"]},
-      {"name": "description", "dataType": ["text"]},
-      {"name": "tags", "dataType": ["string[]"]},
-      {"name": "fileUrl", "dataType": ["string"]},
-      {"name": "processingStatus", "dataType": ["string"]},
-      {"name": "driveFileId", "dataType": ["string"]},
-      {"name": "timestamp", "dataType": ["date"]}
-    ]
-  }]
-}</code></pre>
-
-  <h3>PostgreSQL Database Schema</h3>
-  <pre><code>-- Media Assets Table
-CREATE TABLE media_assets (
-    id SERIAL PRIMARY KEY,
-    drive_file_id VARCHAR(255) UNIQUE,
-    weaviate_object_id UUID,
-    product_name VARCHAR(255),
-    sku VARCHAR(100),
-    file_url TEXT,
-    processing_status VARCHAR(50),
-    ai_description TEXT,
-    ai_tags TEXT[],
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- Processing Logs Table
-CREATE TABLE processing_logs (
-    id SERIAL PRIMARY KEY,
-    media_asset_id INTEGER REFERENCES media_assets(id),
-    workflow_execution_id VARCHAR(255),
-    step_name VARCHAR(100),
-    status VARCHAR(50),
-    error_message TEXT,
-    processing_time INTERVAL,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Indexes for Performance
-CREATE INDEX idx_media_assets_sku ON media_assets(sku);
-CREATE INDEX idx_media_assets_status ON media_assets(processing_status);
-CREATE INDEX idx_processing_logs_asset_id ON processing_logs(media_asset_id);
-CREATE INDEX idx_processing_logs_status ON processing_logs(status);</code></pre>
-</section>
 
 <section id="deployment">
   <h2>🚀 Deployment & Hosting Options</h2>
